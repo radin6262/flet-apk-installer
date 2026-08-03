@@ -12,6 +12,8 @@ dependencies:
   flutter:
     sdk: flutter
 
+  android_package_installer: ^0.0.3
+
   # your dependencies here
 
 dev_dependencies:
