@@ -1,6 +1,6 @@
 import 'package:flet/flet.dart';
 import 'package:flutter/material.dart';
-import 'package:apk_sideload/install_apk.dart';
+import 'package:android_package_installer/android_package_installer.dart';
 
 class FletApkInstallerControl extends StatefulWidget {
   final Control control;
@@ -15,44 +15,30 @@ class FletApkInstallerControl extends StatefulWidget {
       _FletApkInstallerControlState();
 }
 
-class _FletApkInstallerControlState
-    extends State<FletApkInstallerControl> {
-
-  String status = "Ready";
+class _FletApkInstallerControlState extends State<FletApkInstallerControl> {
 
   @override
   void initState() {
     super.initState();
-    installApk();
+
+    widget.control.onEvent("install", (event) {
+      final path = widget.control.getString("path", "");
+
+      if (path != null && path.isNotEmpty) {
+        installApk(path);
+      }
+    });
   }
 
-  Future<void> installApk() async {
-    String path = widget.control.getString("path", "") ?? "";
-
-    if (path.isEmpty) {
-      setState(() {
-        status = "No APK path provided";
-      });
-      return;
-    }
-
+  Future<void> installApk(String path) async {
     try {
-      setState(() {
-        status = "Opening installer...";
-      });
+      await AndroidPackageInstaller.installApk(
+        apkPath: path,
+      );
 
-      final installer = InstallApk();
-
-      await installer.installApk(path);
-
-      setState(() {
-        status = "Installer opened";
-      });
-
+      debugPrint("APK installer opened");
     } catch (e) {
-      setState(() {
-        status = "Error: $e";
-      });
+      debugPrint("APK install failed: $e");
     }
   }
 
@@ -60,7 +46,7 @@ class _FletApkInstallerControlState
   Widget build(BuildContext context) {
     return LayoutControl(
       control: widget.control,
-      child: Text(status),
+      child: const SizedBox.shrink(),
     );
   }
 }

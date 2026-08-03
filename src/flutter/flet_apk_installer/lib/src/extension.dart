@@ -8,10 +8,7 @@ class Extension extends FletExtension {
   Widget? createWidget(Key? key, Control control) {
     switch (control.type) {
       case "FletApkInstaller":
-        return FletApkInstallerControl(
-          key: key,
-          control: control,
-        );
+        return FletApkInstallerControl(control: control);
       default:
         return null;
     }
