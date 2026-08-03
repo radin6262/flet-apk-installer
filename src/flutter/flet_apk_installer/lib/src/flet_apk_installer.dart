@@ -16,29 +16,33 @@ class FletApkInstallerControl extends StatefulWidget {
 }
 
 class _FletApkInstallerControlState extends State<FletApkInstallerControl> {
+  bool installing = false;
 
   @override
   void initState() {
     super.initState();
 
-    widget.control.onEvent("install", (event) {
-      final path = widget.control.getString("path", "");
+    final path = widget.control.getString("path", "");
 
-      if (path != null && path.isNotEmpty) {
-        installApk(path);
-      }
-    });
+    if (path != null && path.isNotEmpty) {
+      installApk(path);
+    }
   }
 
   Future<void> installApk(String path) async {
+    if (installing) return;
+
+    installing = true;
+
     try {
       await AndroidPackageInstaller.installApk(
-        apkPath: path,
+        apkFilePath: path,
       );
 
       debugPrint("APK installer opened");
     } catch (e) {
       debugPrint("APK install failed: $e");
+      installing = false;
     }
   }
 

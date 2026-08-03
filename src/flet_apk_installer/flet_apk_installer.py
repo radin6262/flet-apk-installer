@@ -4,6 +4,9 @@ import flet as ft
 
 @ft.control("FletApkInstaller")
 class FletApkInstaller(ft.LayoutControl):
+    """
+    Flet control for installing APK files on Android.
+    """
 
     path: str = ft.string_attr("path")
 
@@ -14,8 +17,5 @@ class FletApkInstaller(ft.LayoutControl):
     ):
         super().__init__(**kwargs)
 
-        if path:
+        if path is not None:
             self.path = path
-
-    def install(self):
-        self._dispatch_event("install", {})
