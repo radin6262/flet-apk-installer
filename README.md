@@ -1,83 +1,140 @@
-# flet-apk-installer
+# Flet APK Installer
 
-flet-apk-installer [Flet](https://flet.dev) extension.
+A Flet extension that opens Android's native package installer to install an APK from your Python application.
 
-<!--- If your extension wraps a Flutter package, credit it here, ex:
-It is based on the [xyz](https://pub.dev/packages/xyz) Flutter package. -->
+This extension bridges Python and Flutter, allowing Flet applications to request installation of a downloaded APK without manually invoking Android intents from Python.
 
-## Platform Support
+> **Android only**
+>
+> This extension has no effect on Windows, Linux, macOS, or Web.
 
-<!--- Update the table accordingly for your extension, using ✅ and ❌. -->
+---
 
-| Platform  | iOS | Android | Web | Windows | macOS | Linux |
-|-----------|-----|---------|-----|---------|-------|-------|
-| Supported | ✅   | ✅       | ✅   | ✅       | ✅     | ✅     |
+## Features
+
+* Opens Android's native APK installer
+* Simple Python API
+* Native Flutter implementation
+* Designed for Flet applications
+* Easy to integrate into existing projects
+
+---
+
+## Installation
+
+### From GitHub
+
+Add the dependency to your project's `pyproject.toml`:
+
+```toml
+[project]
+dependencies = [
+    "flet>=0.86.5",
+    "flet-apk-installer @ git+https://github.com/radin6262/flet-apk-installer",
+]
+```
+
+Or install directly:
+
+```bash
+pip install "git+https://github.com/radin6262/flet-apk-installer"
+```
+
+---
 
 ## Usage
 
-### Installation
+```python
+import flet as ft
+from flet_apk_installer import FletApkInstaller
 
-Add `flet-apk-installer` dependency to the `pyproject.toml` of your Flet project:
 
-* **From Git**
+def main(page: ft.Page):
+    page.add(
+        FletApkInstaller(
+            path="/storage/emulated/0/Download/my_app.apk"
+        )
+    )
 
-```toml
-dependencies = [
-  "flet-apk-installer @ git+https://github.com/MY_GITHUB_ACCOUNT/flet-apk-installer",
-  "flet>=0.86.5",
-]
+
+ft.app(main)
 ```
 
-<!--- Remove below list item, if your extension isn't yet available on PyPI. -->
+When the control is added to the page on Android, the system package installer is launched for the specified APK.
 
-* **From PyPI**
+---
 
-```toml
-dependencies = [
-  "flet-apk-installer",
-  "flet>=0.86.5",
-]
-```
+## Building Your App
 
-### Run your app
+Since this package contains native Flutter code, you must build your application with the extension included.
 
-A Flet extension has two sides: its Python controls/services and the native Flutter/Dart widgets behind them.
-That native code must be compiled into a Flet client before your controls can render, and the
-prebuilt client that a plain `flet run` uses does **not** include this extension.
-
-So run your app in one of these two ways:
-
-**1. [`flet debug`](https://flet.dev/docs/cli/flet-debug)** — all platforms: *Windows, macOS, Linux, Web, iOS, Android*
-
-Compiles the extension and launches your app on the target you pick. 
-The simplest option, and the way to go for mobile and web:
+Example:
 
 ```bash
-flet debug macos                   # desktop & web: no device needed
-flet debug android -d <device-id>  # mobile: connect a device/emulator first
+flet build apk
 ```
 
-For iOS and Android, pass `-d <device-id>` (run `flet debug --show-devices` to list connected devices).
-Edits to your **Python** code are picked up the next time you run `flet debug`.
-
-**2. [`flet build`](https://flet.dev/docs/cli/flet-build) once, then [`flet run`](https://flet.dev/docs/cli/flet-run)** — desktop only: *Windows, macOS, Linux*
-
-Build a custom client that bundles the extension **once**, then use `flet run` for a fast hot-reload loop while you edit Python:
+or
 
 ```bash
-flet build macos  # or: flet build windows / flet build linux
-flet run          # run from the folder where build/ was created, so it reuses that client
+flet build android
 ```
 
-`flet run` auto-detects the client under `build/<platform>/`, so your Python edits hot-reload instantly.
-Rebuild only when the extension's **Dart** code changes.
+If using GitHub Actions, install the extension before building:
 
-### Examples
+```bash
+cd flet-apk-installer
+pip install -e .
+cd ..
 
-See the [examples](examples) directory.
+flet build apk --release
+```
 
-### Documentation
+---
 
-<!--- Update the link, if your docs are elsewhere. Alternatively, you could write out all docs in this section directly. -->
+## Requirements
 
-Detailed documentation for this package can be found [here](https://MY_GITHUB_ACCOUNT.github.io/flet-apk-installer/).
+* Flet 0.86.5 or newer
+* Android device
+* Flutter (only when building)
+* Python 3.10+
+
+---
+
+## Example
+
+```python
+installer = FletApkInstaller(
+    path="/storage/emulated/0/Download/FNAF_Launcher/fnaf1.apk"
+)
+
+page.add(installer)
+```
+
+---
+
+## Notes
+
+* The APK file must already exist.
+* The user must allow installation from unknown sources if required by Android.
+* Installation is always confirmed by the Android system installer. Apps cannot silently install APKs without privileged permissions.
+
+---
+
+## Repository Structure
+
+```
+flet-apk-installer/
+├── src/
+│   ├── flet_apk_installer/
+│   └── flutter/
+├── examples/
+├── pyproject.toml
+└── README.md
+```
+
+---
+
+## License
+
+MIT License
