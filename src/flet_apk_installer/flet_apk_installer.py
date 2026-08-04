@@ -1,12 +1,10 @@
 from typing import Optional
+import time
 import flet as ft
 
 
 @ft.control("FletApkInstaller")
 class FletApkInstaller(ft.LayoutControl):
-    """
-    Flet control for installing APK files on Android.
-    """
 
     def __init__(
         self,
@@ -15,16 +13,17 @@ class FletApkInstaller(ft.LayoutControl):
     ):
         super().__init__(**kwargs)
 
-        if path is not None:
+        if path:
             self.path = path
 
     @property
-    def path(self) -> str:
+    def path(self):
         return self._get_attr("path", "") or ""
 
     @path.setter
-    def path(self, value: str):
+    def path(self, value):
         self._set_attr("path", value)
 
     def install(self):
-        self._dispatch_event("install", {})
+        self._set_attr("install_request", str(time.time()))
+        self.update()

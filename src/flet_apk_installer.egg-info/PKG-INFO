@@ -2,11 +2,6 @@ Metadata-Version: 2.4
 Name: flet-apk-installer
 Version: 0.1.0
 Summary: FletApkInstaller control for Flet
-Author-email: Flet contributors <you@example.com>
-Project-URL: Homepage, https://mydomain.dev
-Project-URL: Documentation, https://github.com/MyGithubAccount/flet-apk-installer
-Project-URL: Repository, https://github.com/MyGithubAccount/flet-apk-installer
-Project-URL: Issues, https://github.com/MyGithubAccount/flet-apk-installer/issues
 Requires-Python: >=3.10
 Description-Content-Type: text/markdown
 Requires-Dist: flet>=0.86.5
