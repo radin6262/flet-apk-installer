@@ -1,7 +1,6 @@
 import 'package:android_package_installer/android_package_installer.dart';
 import 'package:flet/flet.dart';
 import 'package:flutter/material.dart';
-import 'dart:io';
 
 class FletApkInstallerControl extends StatefulWidget {
   final Control control;
