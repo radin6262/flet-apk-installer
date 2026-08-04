@@ -11,7 +11,7 @@ It is based on the [xyz](https://pub.dev/packages/xyz) Flutter package. -->
 
 | Platform  | iOS | Android | Web | Windows | macOS | Linux |
 |-----------|-----|---------|-----|---------|-------|-------|
-| Supported | ✅   | ✅       | ✅   | ✅       | ✅     | ✅     |
+| Supported | ❌   | ✅       | ❌   | ❌       | ❌     | ❌     |
 
 ## Usage
 
