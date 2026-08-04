@@ -5,6 +5,7 @@ import flet as ft
 
 @ft.control("FletApkInstaller")
 class FletApkInstaller(ft.LayoutControl):
+
     def __init__(
         self,
         path: Optional[str] = None,
@@ -15,12 +16,12 @@ class FletApkInstaller(ft.LayoutControl):
     ):
         super().__init__(**kwargs)
 
+        self._on_debug = on_debug
+        self._on_success = on_success
+        self._on_error = on_error
+
         if path is not None:
             self.path = path
-
-        self.on_debug = on_debug
-        self.on_success = on_success
-        self.on_error = on_error
 
     @property
     def path(self) -> str:
@@ -31,30 +32,23 @@ class FletApkInstaller(ft.LayoutControl):
         self._set_attr("path", value)
 
     def install(self):
-        # Generate a unique request ID every install
-        self._set_attr("install_request", str(time.time_ns()))
+        self._set_attr(
+            "install_request",
+            str(time.time_ns())
+        )
         self.update()
 
-    @property
-    def on_debug(self):
-        return self._get_event_handler("debug")
+    def _handle_event(self, e: ft.Event):
+        if e.event == "debug":
+            if self._on_debug:
+                self._on_debug(e)
 
-    @on_debug.setter
-    def on_debug(self, handler):
-        self._add_event_handler("debug", handler)
+        elif e.event == "success":
+            if self._on_success:
+                self._on_success(e)
 
-    @property
-    def on_success(self):
-        return self._get_event_handler("success")
+        elif e.event == "error":
+            if self._on_error:
+                self._on_error(e)
 
-    @on_success.setter
-    def on_success(self, handler):
-        self._add_event_handler("success", handler)
-
-    @property
-    def on_error(self):
-        return self._get_event_handler("error")
-
-    @on_error.setter
-    def on_error(self, handler):
-        self._add_event_handler("error", handler)
+        return super()._handle_event(e)
