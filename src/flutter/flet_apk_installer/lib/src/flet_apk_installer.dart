@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:android_package_installer/android_package_installer.dart';
 import 'package:flet/flet.dart';
 import 'package:flutter/material.dart';
