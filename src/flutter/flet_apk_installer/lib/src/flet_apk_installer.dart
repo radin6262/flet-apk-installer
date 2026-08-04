@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:android_package_installer/android_package_installer.dart';
 import 'package:flet/flet.dart';
 import 'package:flutter/material.dart';
@@ -41,12 +43,9 @@ class _FletApkInstallerControlState extends State<FletApkInstallerControl> {
       final file = File(path);
       final absolutePath = file.absolute.path;
 
-      _sendEvent("debug", "Received install request.");
       _sendEvent("debug", "APK path:\n$absolutePath");
 
       final exists = await file.exists();
-
-      _sendEvent("debug", "Exists: $exists");
 
       if (!exists) {
         _sendEvent(
@@ -58,9 +57,10 @@ class _FletApkInstallerControlState extends State<FletApkInstallerControl> {
 
       final size = await file.length();
 
-      _sendEvent("debug", "APK size: $size bytes");
-
-      _sendEvent("debug", "Launching Android package installer...");
+      _sendEvent(
+        "debug",
+        "APK found.\nSize: $size bytes",
+      );
 
       await AndroidPackageInstaller.installApk(
         apkFilePath: absolutePath,
@@ -70,6 +70,7 @@ class _FletApkInstallerControlState extends State<FletApkInstallerControl> {
         "success",
         "Package installer launched.",
       );
+
     } catch (e, stack) {
       _sendEvent(
         "error",
@@ -82,21 +83,24 @@ class _FletApkInstallerControlState extends State<FletApkInstallerControl> {
 
   @override
   Widget build(BuildContext context) {
-    final request = widget.control.getString("install_request", "");
-    final path = widget.control.getString("path", "");
+    final request =
+        widget.control.getString("install_request", "");
 
-    if (request != null &&
-        request.isNotEmpty &&
+    final path =
+        widget.control.getString("path", "");
+
+    if (request.isNotEmpty &&
         request != _lastInstallRequest) {
+
       _lastInstallRequest = request;
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
 
-        if (path == null || path.isEmpty) {
+        if (path.isEmpty) {
           _sendEvent(
             "error",
-            "install_request received but path is empty.",
+            "Install request received but path is empty.",
           );
           return;
         }
