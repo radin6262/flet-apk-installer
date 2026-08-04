@@ -21,10 +21,14 @@ class _FletApkInstallerControlState extends State<FletApkInstallerControl> {
   bool _installing = false;
   String? _lastInstallRequest;
 
-  void _sendEvent(String name, String message) {
-    widget.control.triggerEvent(name, {
-      "message": message,
-    });
+  void _sendEvent(String eventName, String message) {
+    try {
+      widget.control.triggerEvent(eventName, {
+        "message": message,
+      });
+    } catch (_) {
+      debugPrint("[$eventName] $message");
+    }
   }
 
   Future<void> _installApk(String path) async {
@@ -37,30 +41,36 @@ class _FletApkInstallerControlState extends State<FletApkInstallerControl> {
 
     try {
       final file = File(path);
+      final absolutePath = file.absolute.path;
 
-      _sendEvent("debug", "Checking APK...\n$path");
+      _sendEvent("debug", "Received install request.");
+      _sendEvent("debug", "APK path:\n$absolutePath");
 
       final exists = await file.exists();
 
+      _sendEvent("debug", "Exists: $exists");
+
       if (!exists) {
-        _sendEvent("error", "APK does not exist:\n$path");
+        _sendEvent(
+          "error",
+          "APK file does not exist.\n\n$absolutePath",
+        );
         return;
       }
 
       final size = await file.length();
 
-      _sendEvent(
-        "debug",
-        "APK found.\nSize: $size bytes",
-      );
+      _sendEvent("debug", "APK size: $size bytes");
+
+      _sendEvent("debug", "Launching Android package installer...");
 
       await AndroidPackageInstaller.installApk(
-        apkFilePath: path,
+        apkFilePath: absolutePath,
       );
 
       _sendEvent(
         "success",
-        "AndroidPackageInstaller.installApk() completed.",
+        "Package installer launched.",
       );
     } catch (e, stack) {
       _sendEvent(
@@ -82,11 +92,19 @@ class _FletApkInstallerControlState extends State<FletApkInstallerControl> {
         request != _lastInstallRequest) {
       _lastInstallRequest = request;
 
-      if (path != null && path.isNotEmpty) {
-        Future.microtask(() => _installApk(path));
-      } else {
-        _sendEvent("error", "install_request received but path is empty.");
-      }
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+
+        if (path == null || path.isEmpty) {
+          _sendEvent(
+            "error",
+            "install_request received but path is empty.",
+          );
+          return;
+        }
+
+        _installApk(path);
+      });
     }
 
     return LayoutControl(
