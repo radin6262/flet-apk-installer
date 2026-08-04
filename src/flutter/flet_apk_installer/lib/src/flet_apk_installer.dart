@@ -1,8 +1,7 @@
-import 'dart:io';
-
 import 'package:android_package_installer/android_package_installer.dart';
 import 'package:flet/flet.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
 
 class FletApkInstallerControl extends StatefulWidget {
   final Control control;
@@ -62,6 +61,11 @@ class _FletApkInstallerControlState extends State<FletApkInstallerControl> {
         "APK found.\nSize: $size bytes",
       );
 
+      _sendEvent(
+        "debug",
+        "Opening Android package installer...",
+      );
+
       await AndroidPackageInstaller.installApk(
         apkFilePath: absolutePath,
       );
@@ -84,10 +88,10 @@ class _FletApkInstallerControlState extends State<FletApkInstallerControl> {
   @override
   Widget build(BuildContext context) {
     final request =
-        widget.control.getString("install_request", "");
+        widget.control.getString("install_request", "") ?? "";
 
     final path =
-        widget.control.getString("path", "");
+        widget.control.getString("path", "") ?? "";
 
     if (request.isNotEmpty &&
         request != _lastInstallRequest) {
