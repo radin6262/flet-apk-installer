@@ -1,12 +1,43 @@
 [project]
 name = "flet-apk-installer"
 version = "0.1.0"
-description = "FletApkInstaller control for Flet"
+description = "Android APK installer extension for Flet applications"
 readme = "README.md"
 requires-python = ">=3.10"
+
+authors = [
+    { name = "radin6262" }
+]
+
+license = "MIT"
+
+keywords = [
+    "flet",
+    "android",
+    "apk",
+    "installer",
+    "flet-extension"
+]
+
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Operating System :: Android",
+    "Framework :: Flet",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
 dependencies = [
     "flet>=0.86.5",
 ]
+
+[project.urls]
+Homepage = "https://github.com/radin6262/flet-apk-installer"
+Documentation = "https://radin6262.github.io/flet-apk-installer/"
+Repository = "https://github.com/radin6262/flet-apk-installer"
+
 
 [dependency-groups]
 dev = [
@@ -15,11 +46,14 @@ dev = [
     "mkdocstrings[python]"
 ]
 
+
 [tool.setuptools.package-data]
 "flutter.flet_apk_installer" = ["**/*"]
 
+
 [tool.setuptools]
 license-files = []
+
 
 [build-system]
 requires = ["setuptools"]
