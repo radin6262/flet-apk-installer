@@ -72,15 +72,11 @@ flet run          # run from the folder where build/ was created, so it reuses t
 `flet run` auto-detects the client under `build/<platform>/`, so your Python edits hot-reload instantly.
 Rebuild only when the extension's **Dart** code changes.
 
-### Examples
-
-See the [examples](examples) directory.
-
 ### Documentation
 
 <!--- Update the link, if your docs are elsewhere. Alternatively, you could write out all docs in this section directly. -->
 
-Detailed documentation for this package can be found [here](https://MY_GITHUB_ACCOUNT.github.io/flet-apk-installer/).
+Detailed documentation for this package can be found [here]([https://MY_GITHUB_ACCOUNT.github.io/flet-apk-installer/](https://github.com/radin6262/flet-apk-installer/wiki)).
 
 [![PyPI](https://img.shields.io/pypi/v/flet-apk-installer)](https://pypi.org/project/flet-apk-installer/)
 [![Python](https://img.shields.io/pypi/pyversions/flet-apk-installer)](https://pypi.org/project/flet-apk-installer/)
@@ -145,11 +141,9 @@ APK installation requires Android's install package permission.
 Add the following permission to your Flet Android configuration:
 
 ```toml
-[tool.flet.android]
-
-permissions = [
-    "android.permission.REQUEST_INSTALL_PACKAGES"
-]
+[tool.flet.android.permission]
+"android.permission.INTERNET" = true
+"android.permission.REQUEST_INSTALL_PACKAGES" = true
 ```
 
 Android may also require the user to allow your application to install unknown apps:
