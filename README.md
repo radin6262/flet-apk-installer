@@ -1,4 +1,4 @@
-# flet-apk-installer
+**# flet-apk-installer
 
 flet-apk-installer [Flet](https://flet.dev) extension.
 
@@ -81,3 +81,251 @@ See the [examples](examples) directory.
 <!--- Update the link, if your docs are elsewhere. Alternatively, you could write out all docs in this section directly. -->
 
 Detailed documentation for this package can be found [here](https://MY_GITHUB_ACCOUNT.github.io/flet-apk-installer/).
+**# flet-apk-installer
+
+[![PyPI](https://img.shields.io/pypi/v/flet-apk-installer)](https://pypi.org/project/flet-apk-installer/)
+[![Python](https://img.shields.io/pypi/pyversions/flet-apk-installer)](https://pypi.org/project/flet-apk-installer/)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+A simple Android APK installation extension for [Flet](https://flet.dev).
+
+`flet-apk-installer` allows Flet Android applications to open and install APK files using the Android system package installer without requiring developers to manually handle Android intents, `FileProvider`, or Java bridge code.
+
+Built for Flet applications that need APK installation functionality, such as:
+
+* Game launchers
+* App managers
+* Update systems
+* Custom Android tools
+
+---
+
+## Features
+
+* Install APK files from Flet Android applications
+* Simple Python API
+* Built-in installation callbacks
+* No manual Android intent handling
+* No manual `FileProvider` setup
+* Works with Flet extensions
+* Uses Android's official package installer flow
+
+---
+
+## Platform Support
+
+| Platform  | iOS | Android | Web | Windows | macOS | Linux |
+| --------- | --- | ------- | --- | ------- | ----- | ----- |
+| Supported | ❌   | ✅       | ❌   | ❌       | ❌     | ❌     |
+
+---
+
+## Installation
+
+Install from PyPI:
+
+```bash
+pip install flet-apk-installer
+```
+
+Or add it to your Flet project's `pyproject.toml`:
+
+```toml
+dependencies = [
+    "flet-apk-installer",
+    "flet>=0.86.5",
+]
+```
+
+---
+
+## Android Configuration
+
+APK installation requires Android's install package permission.
+
+Add the following permission to your Flet Android configuration:
+
+```toml
+[tool.flet.android]
+
+permissions = [
+    "android.permission.REQUEST_INSTALL_PACKAGES"
+]
+```
+
+Android may also require the user to allow your application to install unknown apps:
+
+```
+Settings → Install unknown apps → Your application → Allow
+```
+
+This is an Android security requirement and cannot be bypassed by normal applications.
+
+---
+
+## Quick Start
+
+```python
+import flet as ft
+from flet_apk_installer import FletApkInstaller
+
+
+def main(page: ft.Page):
+
+    def on_debug(message):
+        print("DEBUG:", message)
+
+    def on_success(message):
+        print("SUCCESS:", message)
+
+    def on_error(message):
+        print("ERROR:", message)
+
+
+    installer = FletApkInstaller(
+        on_debug=on_debug,
+        on_success=on_success,
+        on_error=on_error,
+    )
+
+
+    def install_apk(e):
+        installer.path = "/path/to/application.apk"
+        installer.install()
+
+
+    page.add(
+        ft.ElevatedButton(
+            "Install APK",
+            on_click=install_apk,
+        ),
+        installer,
+    )
+
+
+ft.app(target=main)
+```
+
+---
+
+## How It Works
+
+The installation flow is:
+
+```
+Your Flet App
+      |
+      v
+flet-apk-installer
+      |
+      v
+Android Package Installer
+      |
+      v
+User confirms installation
+```
+
+The package does not install applications silently. Android requires user confirmation for security reasons.
+
+---
+
+## Callbacks
+
+`FletApkInstaller` provides callbacks for monitoring installation status.
+
+### Debug Callback
+
+Called for installation progress messages.
+
+```python
+def on_debug(message):
+    print(message)
+```
+
+---
+
+### Success Callback
+
+Called when the installation process completes successfully.
+
+```python
+def on_success(message):
+    print(message)
+```
+
+---
+
+### Error Callback
+
+Called when an installation error occurs.
+
+```python
+def on_error(message):
+    print(message)
+```
+
+---
+
+## Example Projects
+
+`flet-apk-installer` can be used in applications such as:
+
+* Android game launchers
+* Custom app stores
+* APK update managers
+* Internal enterprise tools
+
+Example:
+
+A game launcher can:
+
+1. Download an APK
+2. Verify the file
+3. Pass the APK path to `FletApkInstaller`
+4. Open Android's installer
+
+---
+
+## Important Notes
+
+* Android only.
+* The APK file must already exist on the device.
+* The user must approve installation.
+* Silent installation is not possible for normal Android applications.
+* The extension must be included in the Flet Android build.
+
+---
+
+## Running With Flet
+
+Because this is a Flet extension, the native extension code must be included in your application.
+
+Use:
+
+```bash
+flet debug android -d <device-id>
+```
+
+or build your application:
+
+```bash
+flet build apk
+```
+
+The standard Flet client does not contain third-party extensions.
+
+---
+
+## Documentation
+
+Full usage documentation:
+
+```
+https://radin6262.github.io/flet-apk-installer/
+```
+
+---
+
+## License
+
+MIT License
