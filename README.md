@@ -81,7 +81,6 @@ See the [examples](examples) directory.
 <!--- Update the link, if your docs are elsewhere. Alternatively, you could write out all docs in this section directly. -->
 
 Detailed documentation for this package can be found [here](https://MY_GITHUB_ACCOUNT.github.io/flet-apk-installer/).
-**# flet-apk-installer
 
 [![PyPI](https://img.shields.io/pypi/v/flet-apk-installer)](https://pypi.org/project/flet-apk-installer/)
 [![Python](https://img.shields.io/pypi/pyversions/flet-apk-installer)](https://pypi.org/project/flet-apk-installer/)
