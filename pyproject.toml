@@ -25,7 +25,6 @@ classifiers = [
     "Programming Language :: Python :: 3 :: Only",
     "Operating System :: Android",
     "Framework :: Flet",
-    "License :: OSI Approved :: MIT License",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 
