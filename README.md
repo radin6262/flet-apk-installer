@@ -1,4 +1,4 @@
-**# flet-apk-installer
+# flet-apk-installer
 
 flet-apk-installer [Flet](https://flet.dev) extension.
 
